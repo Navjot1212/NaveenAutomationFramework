@@ -4,50 +4,31 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
 
-import com.naveenautomation.Base.TestBase;
+import com.naveenautomation.Browsers.ProxyDriver;
 
-public class AddressBookPage extends TestBase {
-	
-	Scanner sc = new Scanner(System.in);
+public class AddressBookPage extends Page {
 
-	public AddressBookPage() {
-		PageFactory.initElements(driver, this);
+	public AddressBookPage(WebDriver wd, boolean waitForPageToLoad) {
+		super(wd, waitForPageToLoad);
 	}
 
-	@FindBy(css = ("div.alert"))
-	WebElement sucessAlert;
-	
-	@FindBy(id = ("input-firstname"))
-	WebElement firstName;
-	
-	@FindBy(id = ("input-lastname"))
-	WebElement lastName;
-	
-	@FindBy(id = ("input-address-1"))
-	WebElement address;
-	
-	@FindBy(id = ("input-city"))
-	WebElement city;
-	
-	@FindBy(id = ("input-postcode"))
-	WebElement postalCode;
-	
-	@FindBy(id = ("input-country"))
-	WebElement country;
-	
-	@FindBy(id = ("input-zone"))
-	WebElement province;
-	
-	@FindBy(css = ("input[value='Continue']"))
-	WebElement continueBtn;
-	
+	private static final String PAGE_URL = "/address";
+	Scanner sc = new Scanner(System.in);
+	private static final By sucessAlert = By.cssSelector("div.alert");
+	private static final By firstName = By.id("input-firstname");
+	private static final By lastName = By.id("input-lastname");
+	private static final By address = By.id("input-address-1");
+	private static final By city = By.id("input-city");
+	private static final By postalCode = By.id("input-postcode");
+	private static final By country = By.id("input-country");
+	private static final By province = By.id("input-zone");
+	private static final By continueBtn = By.cssSelector("input[value='Continue']");
+
 	public String getSucessAlert() {
-		return sucessAlert.getText();
+		return ((ProxyDriver) wd).getText(sucessAlert, 10);
 	}
 
 	public String getAddress(String customerName, String postalCode) {
@@ -58,38 +39,38 @@ public class AddressBookPage extends TestBase {
 	public void editAddress(String customerName, String postalcode) {
 		getElementFromTheTable(customerName, postalcode, AddressBookEntries.EDIT).click();
 		System.out.println("Please enter first name");
-		firstName.clear();
-		firstName.sendKeys(sc.nextLine());
+		((ProxyDriver) wd).clear(firstName);
+		((ProxyDriver) wd).sendKeys(firstName, sc.nextLine());
 		System.out.println("Please enter last name");
-		lastName.clear();
-		lastName.sendKeys(sc.nextLine());
+		((ProxyDriver) wd).clear(lastName);
+		((ProxyDriver) wd).sendKeys(lastName, sc.nextLine());
 		System.out.println("Please enter Address");
-		address.clear();
-		address.sendKeys(sc.nextLine());
+		((ProxyDriver) wd).clear(address);
+		((ProxyDriver) wd).sendKeys(address, sc.nextLine());
 		System.out.println("Please enter City");
-		city.clear();
-		city.sendKeys(sc.nextLine());
+		((ProxyDriver) wd).clear(city);
+		((ProxyDriver) wd).sendKeys(city, sc.nextLine());
 		System.out.println("Please enter postal code");
-		postalCode.clear();
-		postalCode.sendKeys(sc.nextLine());
+		((ProxyDriver) wd).clear(postalCode);
+		((ProxyDriver) wd).sendKeys(postalCode, sc.nextLine());
 		System.out.println("Please enter Country");
 		String country = sc.nextLine();
-		selectElementByVisibleText(this.country, country);
+		((ProxyDriver) wd).selectFromDropDown(AddressBookPage.country, country);
 		System.out.println("Please enter Region/State");
 		String province = sc.nextLine();
-		selectElementByVisibleText(this.province, province);
-		continueBtn.click();
+		((ProxyDriver) wd).selectFromDropDown(AddressBookPage.province, province);
+		((ProxyDriver) wd).click(continueBtn);
 
 	}
 
 	public void deleteAddress(String customerName, String postalCode) {
 		getElementFromTheTable(customerName, postalCode, AddressBookEntries.DELETE).click();
-		driver.switchTo().alert().accept();
+		wd.switchTo().alert().accept();
 
 	}
 
 	public WebElement getElementFromTheTable(String customerName, String postalCode, AddressBookEntries column) {
-		List<WebElement> rowsInTable = driver.findElements(By.cssSelector("table.table tbody tr"));
+		List<WebElement> rowsInTable = wd.findElements(By.cssSelector("table.table tbody tr"));
 		for (WebElement row : rowsInTable) {
 			List<WebElement> cellsInARow = row.findElements(By.cssSelector("td"));
 			String addressText = cellsInARow.get(0).getText();
@@ -112,14 +93,24 @@ public class AddressBookPage extends TestBase {
 	}
 
 	public enum AddressBookEntries {
-		ADDRESS,
-		EDIT,
-		DELETE;
+		ADDRESS, EDIT, DELETE;
 	}
-	
-	public void selectElementByVisibleText(WebElement element, String value) {
-		Select sc = new Select(element);
-		sc.selectByVisibleText(value);
+
+	@Override
+	protected void isLoaded() {
+
+		if (!urlContains(wd.getCurrentUrl())) {
+			throw new Error();
+		}
+	}
+
+	@Override
+	protected String getPageUrl() {
+		return getDomain() + PAGE_URL;
+	}
+
+	@Override
+	public AddressBookPage get() {
+		return (AddressBookPage) super.get();
 	}
 }
-

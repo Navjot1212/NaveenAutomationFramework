@@ -1,39 +1,58 @@
 package com.naveenautomation.Pages;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import com.naveenautomation.Browsers.ProxyDriver;
 
-import com.naveenautomation.Base.TestBase;
+public class AccountLoginPage extends Page {
 
-public class AccountLoginPage extends TestBase {
-
-	public AccountLoginPage() {
-		PageFactory.initElements(driver, this);
+	public AccountLoginPage(WebDriver wd, boolean waitForPageToLoad) {
+		super(wd, waitForPageToLoad);
 	}
 
-	@FindBy(css = "form div[class='form-group']:first-of-type input")
-	WebElement email;
+	private static final String PAGE_URL = "/login";
+	private static By emailInputField = By.cssSelector("form div.form-group:first-of-type input");
+	private static By passwordInputField = By.cssSelector("form div.form-group:last-of-type input");
+	private static By loginBtn = By.cssSelector("input[type='submit']");
+	private static By continueBtn = By.xpath("//a[text()='Continue']");
 
-	@FindBy(css = "form div[class='form-group']:last-of-type input")
-	WebElement password;
-
-	@FindBy(css = "input[type='submit']")
-	WebElement loginBtn;
-
-	private void enterEmail(String email) {
-		this.email.sendKeys(email);
+	private void enterEmailInputField(String email) {
+		((ProxyDriver) wd).sendKeys(emailInputField, email);
 	}
 
-	private void enterPassword(String password) {
-		this.password.sendKeys(password);
+	private void enterPasswordInputField(String password) {
+		((ProxyDriver) wd).sendKeys(passwordInputField, password);
 	}
 
 	public MyAccountPage login(String email, String password) {
-		enterEmail(email);
-		enterPassword(password);
-		loginBtn.submit();
-		return new MyAccountPage();
+		enterEmailInputField(email);
+		enterPasswordInputField(password);
+		((ProxyDriver) wd).submit(loginBtn);
+		return new MyAccountPage(wd, true);
+
+	}
+
+	public RegisterAccountPage clickContinueButton() {
+		((ProxyDriver) wd).click(continueBtn);
+		return new RegisterAccountPage(wd, true);
+	}
+
+	@Override
+	protected void isLoaded() {
+
+		if (!urlContains(wd.getCurrentUrl())) {
+			throw new Error();
+		}
+	}
+
+	@Override
+	protected String getPageUrl() {
+		return getDomain() + PAGE_URL;
+	}
+
+	@Override
+	public AccountLoginPage get() {
+		return (AccountLoginPage) super.get();
 	}
 
 }

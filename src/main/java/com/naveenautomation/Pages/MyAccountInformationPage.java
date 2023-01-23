@@ -1,42 +1,56 @@
 package com.naveenautomation.Pages;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
-import com.naveenautomation.Base.TestBase;
+import com.naveenautomation.Browsers.ProxyDriver;
 
-public class MyAccountInformationPage extends TestBase {
-	public MyAccountInformationPage() {
-		PageFactory.initElements(driver, this);
+public class MyAccountInformationPage extends Page {
+
+	public MyAccountInformationPage(WebDriver wd, boolean waitForPageToLoad) {
+		super(wd, waitForPageToLoad);
 	}
 
-	@FindBy(id = "input-firstname")
-	WebElement firstName;
-
-	@FindBy(id = "input-lastname")
-	WebElement lastName;
-
-	@FindBy(id = "input-email")
-	WebElement email;
-
-	@FindBy(id = "input-telephone")
-	WebElement telephone;
+	private static final String PAGE_URL = "/edit";
+	private static final By firstName = By.id("input-firstname");
+	private static final By lastName = By.id("input-lastname");
+	private static final By email = By.id("input-email");
+	private static final By telephone = By.id("input-telephone");
 
 	public String getFirstName() {
-		return firstName.getAttribute("value");
+		return ((ProxyDriver) wd).findElement(firstName).getAttribute("value");
 	}
 
 	public String getLastName() {
-		return lastName.getAttribute("value");
+		return ((ProxyDriver) wd).findElement(lastName).getAttribute("value");
+
 	}
 
 	public String getEmail() {
-		return email.getAttribute("value");
+		return ((ProxyDriver) wd).findElement(email).getAttribute("value");
+
 	}
 
 	public String getTelephone() {
-		return telephone.getAttribute("value");
+		return ((ProxyDriver) wd).findElement(telephone).getAttribute("value");
+
+	}
+
+	@Override
+	protected void isLoaded() {
+		if (!urlContains(wd.getCurrentUrl())) {
+			throw new Error();
+		}
+	}
+
+	@Override
+	protected String getPageUrl() {
+		return getDomain() + PAGE_URL;
+	}
+
+	@Override
+	public MyAccountInformationPage get() {
+		return (MyAccountInformationPage) super.get();
 	}
 
 }

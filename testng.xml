@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Suite">
-
+<suite name="Suite" parallel="true">
 	<listeners>
 		<listener class-name="com.naveenautomation.Listeners.CustomListener"></listener>
 		<listener class-name="com.naveenautomation.Reports.ExtentReportListener"></listener>
 		<listener class-name="com.naveenautomation.Utils.TransformerForRetry"></listener>
 	</listeners>
 
-	<test thread-count="5" name="Test">
+	<test thread-count="10" name="Test">
 		<classes>
+			<class name="com.naveenautomation.Tests.AccountCreatedTest" />
+			<class name="com.naveenautomation.Tests.AccountLoginTest" />
+			<class name="com.naveenautomation.Tests.MyWishListTest" />
+			<class name="com.naveenautomation.Tests.MyAccountTest" />
+			<class name="com.naveenautomation.Tests.AccountLogoutTest" />
+			<class name="com.naveenautomation.Tests.OrderHistoryTest" />
+			<class name="com.naveenautomation.Tests.AddressBookTest" />
+			<class name="com.naveenautomation.Tests.PracticeTest" />
 			<class name="com.naveenautomation.Tests.MyAccountInformationTest" />
 		</classes>
 	</test> <!-- Test -->

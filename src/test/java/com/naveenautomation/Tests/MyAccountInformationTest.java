@@ -26,8 +26,7 @@ public class MyAccountInformationTest extends TestBase {
 	public void setUp() {
 		launchBrowser();
 		softAssert = new SoftAssert();
-		yourStorePage = new YourStorePage();
-		yourStorePage.clickMyAccount();
+		yourStorePage = new YourStorePage(driver.get(), true).get();
 		accountLoginPage = yourStorePage.clickLoginBtn();
 	}
 
@@ -35,7 +34,7 @@ public class MyAccountInformationTest extends TestBase {
 	public void verifyAccountInfoIsPreFilledOnTheEdiAccountInfoPageForAllUsers(String username, String password,
 			String firstName, String lastName, String email, String telephone) {
 		myAccountPage = accountLoginPage.login(username, password);
-		softAssert.assertEquals(driver.getTitle(), "My Account", "Page title did not matched");
+		softAssert.assertEquals(driver.get().getTitle(), "My Account", "Page title did not matched");
 		myAccountInformationPage = myAccountPage.clickEditInfo();
 		softAssert.assertEquals(myAccountInformationPage.getFirstName(), firstName, "First name did not matched");
 		softAssert.assertEquals(myAccountInformationPage.getLastName(), lastName, "Last name did not matched");

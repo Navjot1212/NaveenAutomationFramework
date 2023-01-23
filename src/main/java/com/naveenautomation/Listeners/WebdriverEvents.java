@@ -93,7 +93,7 @@ public class WebdriverEvents extends TestBase implements WebDriverEventListener 
 
 	@Override
 	public void afterFindBy(By by, WebElement element, WebDriver driver) {
-		log.info("Elelement Found " + by);
+		log.info("Element Found " + by);
 
 	}
 

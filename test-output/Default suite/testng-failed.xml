@@ -3,13 +3,13 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.naveenautomation.Tests.MyAccountInformationTest2">
+      <class name="com.naveenautomation.Tests.AccountCreatedTest">
         <methods>
-          <include name="verifyAccountInfoIsPreFilledOnTheEdiAccountInfoPageForAllUsers2"/>
           <include name="setUp"/>
+          <include name="verifyUserIsAbleToSignUpSuccesfully"/>
           <include name="tearDown"/>
         </methods>
-      </class> <!-- com.naveenautomation.Tests.MyAccountInformationTest2 -->
+      </class> <!-- com.naveenautomation.Tests.AccountCreatedTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

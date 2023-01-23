@@ -1,58 +1,48 @@
 package com.naveenautomation.Pages;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
-import com.naveenautomation.Base.TestBase;
+import com.naveenautomation.Browsers.ProxyDriver;
 import com.naveenautomation.Utils.Utils;
 
-public class LaptopsAndNotebooksPage extends TestBase {
+public class LaptopsAndNotebooksPage extends Page {
 
-	public LaptopsAndNotebooksPage() {
-		PageFactory.initElements(driver, this);
+	public LaptopsAndNotebooksPage(WebDriver wd, boolean waitForPageToLoad) {
+		super(wd, waitForPageToLoad);
 	}
 
-	@FindBy(css = "#content h2")
-	WebElement pageHeadingText;
-
-	@FindBy(id = "input-sort")
-	WebElement sortingList;
-
-	@FindBy(css = "#content>div:nth-of-type(4)>div:first-of-type button:nth-of-type(2)")
-	WebElement firstProductWishListBtn;
-
-	@FindBy(css = "#content>div:nth-of-type(4)>div:nth-of-type(2) button:nth-of-type(2)")
-	WebElement secondProductWishListBtn;
-
-	@FindBy(css = "#content>div:nth-of-type(4)>div:nth-of-type(3) button:nth-of-type(2)")
-	WebElement thirdProductWishListBtn;
-
-	@FindBy(css = "div.alert")
-	WebElement wishlistAddedSuccessText;
-
-	@FindBy(css = "div.alert a:last-of-type")
-	WebElement wishlistBtn;
+	private static final String PAGE_URL = "/category&path=18";
+	private static final By pageHeadingText = By.cssSelector("#content h2");
+	private static final By sortingList = By.id("input-sort");
+	private static final By firstProductWishListBtn = By
+			.cssSelector("#content>div:nth-of-type(4)>div:first-of-type button:nth-of-type(2)");
+	private static final By secondProductWishListBtn = By
+			.cssSelector("#content>div:nth-of-type(4)>div:nth-of-type(2) button:nth-of-type(2)");
+	private static final By thirdProductWishListBtn = By
+			.cssSelector("#content>div:nth-of-type(4)>div:nth-of-type(3) button:nth-of-type(2)");
+	private static final By wishlistAddedSuccessText = By.cssSelector("div.alert");
+	private static final By wishlistBtn = By.cssSelector("div.alert a:last-of-type");
 
 	public String getPageHeadingText() {
-		return pageHeadingText.getText();
+		return ((ProxyDriver) wd).getText(pageHeadingText, 10);
 	}
 
 	public void sortProductsByHighestRating() {
-		selectElementByVisibleText(sortingList, "Rating (Highest)");
+		((ProxyDriver) wd).selectFromDropDown(sortingList, "Rating (Highest)");
 	}
 
 	private void addFirstProductToWishList() {
-		firstProductWishListBtn.click();
+		((ProxyDriver) wd).click(firstProductWishListBtn);
 	}
 
 	private void addSecondProductToWishList() {
-		secondProductWishListBtn.click();
+		((ProxyDriver) wd).click(secondProductWishListBtn);
 	}
 
 	private void addThirdProductToWishList() {
-		thirdProductWishListBtn.click();
+		((ProxyDriver) wd).click(thirdProductWishListBtn);
+
 	}
 
 	public void addProductsToWishList() {
@@ -63,17 +53,29 @@ public class LaptopsAndNotebooksPage extends TestBase {
 	}
 
 	public String getWishlistAddedSuccessText() {
-		return wishlistAddedSuccessText.getText();
-	}
-
-	private void selectElementByVisibleText(WebElement element, String text) {
-		Select sc = new Select(element);
-		sc.selectByVisibleText(text);
+		return ((ProxyDriver) wd).getText(wishlistAddedSuccessText, 0);
 	}
 
 	public MyWishListPage clickWishList() {
-		wishlistBtn.click();
-		return new MyWishListPage();
+		((ProxyDriver) wd).click(wishlistBtn);
+		return new MyWishListPage(wd, true);
 	}
 
+	@Override
+	protected void isLoaded() {
+
+		if (!urlContains(wd.getCurrentUrl())) {
+			throw new Error();
+		}
+	}
+
+	@Override
+	protected String getPageUrl() {
+		return getDomain() + PAGE_URL;
+	}
+
+	@Override
+	public LaptopsAndNotebooksPage get() {
+		return (LaptopsAndNotebooksPage) super.get();
+	}
 }

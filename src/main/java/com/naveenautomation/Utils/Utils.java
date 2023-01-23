@@ -58,7 +58,7 @@ public class Utils extends TestBase {
 
 	public static void takeScreenShot(String testName) {
 		String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-		File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		File screenshotFile = ((TakesScreenshot) driver.get()).getScreenshotAs(OutputType.FILE);
 		try {
 			FileUtils.copyFile(screenshotFile,
 					new File("./FailedTestScreenShots\\" + testName + "_" + timeStamp + ".jpg"));

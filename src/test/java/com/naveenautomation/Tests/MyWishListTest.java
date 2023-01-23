@@ -1,7 +1,6 @@
 package com.naveenautomation.Tests;
 
 import org.openqa.selenium.By;
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -29,8 +28,7 @@ public class MyWishListTest extends TestBase {
 		launchBrowser();
 		// Logging into NaveenAutomation website
 		softAssert = new SoftAssert();
-		yourStorePage = new YourStorePage();
-		yourStorePage.clickMyAccount();
+		yourStorePage = new YourStorePage(driver.get(), true).get();
 		AccountLoginPage accountLoginPage = yourStorePage.clickLoginBtn();
 		myAccountPage = accountLoginPage.login("Nav12@icloud.com", "Navjot13");
 
@@ -42,7 +40,7 @@ public class MyWishListTest extends TestBase {
 		laptopsAndNotebooksPage = myAccountPage.clickAllLaptopsAndNoteBooksBtn();
 
 		// validating laptops and notebooks page title and text
-		softAssert.assertEquals(driver.getTitle(), "Laptops & Notebooks", "Page not loaded");
+		softAssert.assertEquals(driver.get().getTitle(), "Laptops & Notebooks", "Page not loaded");
 		softAssert.assertEquals(laptopsAndNotebooksPage.getPageHeadingText(), "Laptops & Notebooks",
 				"Text did not matched");
 
@@ -60,7 +58,7 @@ public class MyWishListTest extends TestBase {
 		myWishListPage = laptopsAndNotebooksPage.clickWishList();
 
 		// validating My Wish List page title
-		softAssert.assertEquals(driver.getTitle(), "My Wish List", "Page not loaded");
+		softAssert.assertEquals(driver.get().getTitle(), "My Wish List", "Page not loaded");
 
 		// Validating Product's names and prices in the wish list
 		String firstProductName = myWishListPage.getElementFromTheTable("MacBook Air", MyWishList.PRODUCTNAME)
@@ -86,13 +84,8 @@ public class MyWishListTest extends TestBase {
 		softAssert.assertEquals(myWishListPage.getSuccessAlertText(), "Success: You have modified your wish list!\n×",
 				"Text did not matched");
 		softAssert.assertAll();
-
 	}
 	
-	@Test
-	public void helloHelloMikeTesting() {
-		Assert.assertTrue(false);
-	}
 
 	@AfterMethod
 	public void tearDown() {
